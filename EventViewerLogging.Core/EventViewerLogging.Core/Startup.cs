@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -26,15 +27,19 @@ namespace EventViewerLogging.Core
         {
             //NOTE: Before running execute this command in powershell(run as administrator) once: "New-EventLog -LogName VladApp -Source VladAppSource"
 
-            app.Run(context => {
+            app.Map("/log", configuration => configuration.Run(async context => {
+
                 logger.LogTrace("Nothing to do");
                 logger.LogDebug("Check it out");
                 logger.LogInformation("Just FYI Vlad");
                 logger.LogWarning("Attention Vlad");
-                logger.LogError("AAAAAA");
+                logger.LogError("AAAAAA. RequestId" + context.TraceIdentifier);
                 logger.LogCritical("All is lost!...");
+                await context.Response.WriteAsync("Did some logging"); 
+            }));
 
-                return context.Response.WriteAsync("Hi Vlad"); 
+            app.Run(context => {
+                return context.Response.WriteAsync("No logging here"); 
             });
         }
     }

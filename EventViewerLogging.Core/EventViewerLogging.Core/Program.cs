@@ -23,11 +23,13 @@ namespace EventViewerLogging.Core
                      .UseStartup<Startup>()
                         .ConfigureLogging((hostingContext, logging) =>
                         {
+                            logging.ClearProviders();
                             logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                             logging.AddEventLog(new EventLogSettings()
                             {
                                 SourceName = "VladAppSource",
-                                LogName = "VladApp"                                
+                                LogName = "VladApp",
+                                Filter = (message, level) => level >= LogLevel.Trace
                             });
                             logging.AddConsole();
                         })
