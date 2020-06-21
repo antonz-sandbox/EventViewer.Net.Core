@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    @model HomeViewModel;
+}
+
+<div class="text-center">
+    <div style="width:90%; margin:0 auto;">
+        <table id="example" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>EmployeeId</th>
+                    <th>ExperienceYears</th>
+                    <th>Position</th>
+                    <th>Salary</th>
+                </tr>
+            </thead>
+    @foreach (var employee in Model.Employees)
+    {
+        <tr>
+            <td>@employee.FirstName</td>
+            <td>@employee.LastName</td>
+            <td>@employee.JobInfo.EmployeeId</td>
+            <td>@employee.JobInfo.ExperienceYears</td>
+            <td>@employee.JobInfo.Position</td>
+            <td>@employee.Salary</td>
+        </tr>
+    } 
+        </table>
+
+    </div>
+</div>
