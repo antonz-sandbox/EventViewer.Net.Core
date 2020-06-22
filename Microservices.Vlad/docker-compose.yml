@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  microservices.web:
+    image: ${DOCKER_REGISTRY-}microservicesweb
+    build:
+      context: .
+      dockerfile: Microservices.Web/Dockerfile
+
+  microservices.repo:
+    image: ${DOCKER_REGISTRY-}microservicesrepo
+    build:
+      context: .
+      dockerfile: Microservices.Repo/Dockerfile
+
+  microservices.salary:
+    image: ${DOCKER_REGISTRY-}microservicessalary
+    build:
+      context: .
+      dockerfile: Microservices.Salary/Dockerfile      
