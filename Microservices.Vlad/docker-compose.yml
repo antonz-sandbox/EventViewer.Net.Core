@@ -3,6 +3,9 @@ version: '3.4'
 services:
   microservices.web:
     image: ${DOCKER_REGISTRY-}microservicesweb
+    environment:
+        - RepoUrl=http://microservices.repo/people/employees/20
+        - SalaryUrl=http://microservices.salary/salary/calculate
     build:
       context: .
       dockerfile: Microservices.Web/Dockerfile

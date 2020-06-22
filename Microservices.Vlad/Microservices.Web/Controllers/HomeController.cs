@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 using Microservices.Common;
 using System.Text;
 using Microsevervices.Web.BusinessLogic;
+using Microsoft.Extensions.Options;
+using Microservices.Web;
 
 namespace Microsevervices.Web.Controllers
 {
@@ -18,11 +20,13 @@ namespace Microsevervices.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly EmployeesAggregator _aggregator;
+        private readonly MicroservicesUrls _urls;
 
-        public HomeController(ILogger<HomeController> logger, EmployeesAggregator aggregator)
+        public HomeController(ILogger<HomeController> logger, EmployeesAggregator aggregator, IOptions<MicroservicesUrls> options)
         {
             _logger = logger;
             _aggregator = aggregator;
+            _urls = options.Value;
         }
 
         public async Task<IActionResult> IndexAsync()
@@ -47,7 +51,7 @@ namespace Microsevervices.Web.Controllers
             string serializedJobs = JsonConvert.SerializeObject(jobs);
             var content = new StringContent(serializedJobs, Encoding.UTF8, "application/json");
 
-            using (var response = await httpClient.PostAsync("http://microservices.salary/salary/calculate", content))
+            using (var response = await httpClient.PostAsync(_urls.SalaryUrl, content))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 ViewBag.Result = "Success";
@@ -57,7 +61,7 @@ namespace Microsevervices.Web.Controllers
 
         private async Task<IEnumerable<Employee>> GetEmployeesAsync(HttpClient httpClient)
         {
-            using (var response = await httpClient.GetAsync("http://microservices.repo/people/employees/20"))
+            using (var response = await httpClient.GetAsync(_urls.RepoUrl))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 ViewBag.Result = "Success";
